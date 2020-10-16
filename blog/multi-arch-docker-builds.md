@@ -1,3 +1,10 @@
+---
+layout: post
+featured: false
+popular: false
+pinned: false
+date: '2020-10-20 9:00'
+published: false
 title: Build Multiple OS Architecture Docker Images
 html_title: Build Multiple OS Architecture Docker Images | CircleCI
 description: >-
@@ -157,6 +164,8 @@ In the above code, the build is using a `machine executor` and assigning values 
 
 The remaining `run:` and `command:` keys in the above example demonstrate how to execute the application's unit tests, authenticate to Docker Hub in order to pull and push images, build a Docker image using the `Dockerfile` found in the  `/app` directory and then finally pushing that image to Docker Hub.  There really isn't anything too foreign going on in these elements so let's look at some of the more exciting portions of this config file.
 
+**NOTE:** Before I move on to other sections in the pipeline, I want to address a recent change in the [Docker Hub registry platform.][23] In the `docker login` step above, it ensures that your requests to Docker Hub are authenticated. Whenever you pull images from, or push images to Docker Hub on CircleCI, we recommend **logging** in to your Docker Hub Hub for both docker pull and docker push steps in your CircleCI config. Logging in will make sure that your jobs have access to a higher [Docker Hub rate limit][24].
+
 ```
       - run:
           name: Install buildx
@@ -205,7 +214,7 @@ The code snippet above is the actual `cross-build` make command which creates ne
 
 This post demonstrated how to build various Docker Images for multiple operating systems and processor architectures from within a CI/CD pipeline. This post also briefly introduced the [Docker BuildX feature][9] which is currently an experimental utility that is expected to become the defacto build utility in future releases of Docker. I consider BuildX to be the next gen Docker image building tool that will enable expansive, advanced and optimized capabilities that will enhance the current image building experience.
 
-I also briefly discussed some of the intricacies of building Docker images targeting multiple operating systems and platform architectures which highlight the technical differences between Docker Containers and Virtual Machine concepts. Though seemly similar at an abstract view they are fundamentally different at their cores. 
+I also briefly discussed some of the intricacies of building Docker images targeting multiple operating systems and platform architectures which highlight the technical differences between Docker Containers and Virtual Machine concepts. Though seemly similar at an abstract view they are fundamentally different at their cores. Finally I'll reiterate that Docker has implemented new [Docker Hub rate limits][24] which requires all calls to Docker Hub are authenticated. Whenever you pull images from, or push images to Docker Hub on CircleCI, we recommend **logging** in to your Docker Hub account for both `docker pull` and `docker push` steps in your CircleCI config.
 
 Thank you for following this post and I hope you found it useful. Please feel free to reach out with feedback on Twitter [@punkdata][24].
 
@@ -230,3 +239,5 @@ Thank you for following this post and I hope you found it useful. Please feel fr
 [19]: https://docs.docker.com/get-started/overview/
 [20]: https://wiki.qemu.org/Main_Page
 [22]: https://github.com/tonistiigi/binfmt#installing-emulators
+[23]: https://hub.docker.com/
+[24]: https://docs.docker.com/docker-hub/download-rate-limit/
